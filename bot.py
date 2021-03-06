@@ -2,7 +2,7 @@ import discord
 import time
 from discord.ext import commands
 
-TOKEN = "ODE3NzI1NDkxMTQ5Nzk5NDg2.YENsNQ.-sa3hqOs4imWSZmeWmanHYA3Dec"
+TOKEN = "bruh"
 
 client = commands.Bot(command_prefix = "lx.")
 client.remove_command("help")
