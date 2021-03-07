@@ -15,7 +15,7 @@ async def on_ready():
 @client.command()
 async def help(ctx, arg = "1"):
     if(arg=="1"):
-        await ctx.send("```ğhelp {Sayfa Numarası} - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.```")
+        await ctx.send("```ğhelp - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.\nğduyur - Duyuru yapar (Duyurabilir yetkisine sahip olmalısınız.)```")
       
 @client.command()
 async def ping(ctx):
