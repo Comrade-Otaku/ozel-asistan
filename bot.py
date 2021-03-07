@@ -61,7 +61,9 @@ async def duyur(ctx, *args):
 	
 	response = response[1:len(response)]
 	await ctx.message.delete()
-	await ctx.send("**Duyuru!**  @here\n```" + response + "```")
+	embed = discord.Embed(title=ctx.message.author.name + " diyor ki:", description=response, color=0XFF1123)
+	await ctx.send("@here")
+	await ctx.send(embed=embed)
 
 @client.command()
 async def attack(ctx, *,  imparatorluk):
