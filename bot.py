@@ -70,7 +70,7 @@ async def attack(ctx, *,  imparatorluk):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send("Efendim, ğ?")
+        await ctx.send("```Efendim, ğ?```")
     else:
         raise error
 
