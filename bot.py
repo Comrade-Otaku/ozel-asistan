@@ -1,6 +1,7 @@
 import discord
 import time
 from discord.ext import commands
+from discord import utils
 from tinydb import TinyDB, Query
 
 TOKEN = "bruh"
@@ -8,14 +9,26 @@ TOKEN = "bruh"
 client = commands.Bot(command_prefix = "ğ")
 client.remove_command("help")
 
+
 @client.event
 async def on_ready():
-      print("Özel Asistan uyandı.")
-      
+    print('Özel Asistan uyandı.')
+    
+    servers = len(client.guilds)
+    members = 0
+    for guild in client.guilds:
+        members += guild.member_count - 1
+
+    await client.change_presence(activity = discord.Activity(
+        type = discord.ActivityType.watching,
+        name = f'{servers} sunucu ve {members} üye.'
+    ))
+
+
 @client.command()
 async def help(ctx, arg = "1"):
     if(arg=="1"):
-        await ctx.send("```ğhelp - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.\nğduyur - Duyuru yapar (Duyurabilir yetkisine sahip olmalısınız.)```")
+        await ctx.send("```ğhelp - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.\nğduyur - Duyuru yapar (Duyurabilir yetkisine sahip olmalısınız.)\nğprint - Aynı kullanıcı adı ve profil fotoğrafıyla botun mesaj yazmasını sağlar.```")
       
 @client.command()
 async def ping(ctx):
@@ -25,13 +38,13 @@ async def ping(ctx):
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
-    await ctx.send(f"```{user} başarıyla atıldı.```")
+    await ctx.send(f"```{user} başarıyla atıldı.\nSebep: " + reason + "```")
   
 @client.command()
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
-    await ctx.send(f"```{user} başarıyla yasaklandı.```")
+    await ctx.send(f"```{user} başarıyla yasaklandı.\nSebep: " + reason + "```")
 
 @client.command()
 async def unban(ctx, *, member):
@@ -75,5 +88,22 @@ async def on_command_error(ctx, error):
         await ctx.send("```Efendim, ğ?```")
     else:
         raise error
+
+@client.command()
+async def print(ctx, *args):
+    response = ""
+
+    for arg in args:
+        response = response + " " + arg
+	
+    response = response[1:len(response)]
+    
+    webhooks = await ctx.channel.webhooks()
+    webhook = utils.get(webhooks, name = "Özel Asistan")
+    if webhook is None:
+        webhook = await ctx.channel.create_webhook(name = "Özel Asistan")
+
+    await webhook.send(response, username = ctx.author.name, avatar_url = ctx.author.avatar_url)
+    await ctx.delete()
 
 client.run(TOKEN)
