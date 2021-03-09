@@ -2,18 +2,13 @@ import discord
 import time
 from discord.ext import commands
 from discord import utils
-from tinydb import TinyDB, Query
-
-TOKEN = "bruh"
+from oaconfig import OzelAsistan
 
 client = commands.Bot(command_prefix = "ğ")
 client.remove_command("help")
 
-
 @client.event
 async def on_ready():
-    print('Özel Asistan uyandı.')
-    
     servers = len(client.guilds)
     members = 0
     for guild in client.guilds:
@@ -31,22 +26,26 @@ async def help(ctx, arg = "1"):
         await ctx.send("```ğhelp - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.\nğduyur - Duyuru yapar (Duyurabilir yetkisine sahip olmalısınız.)\nğprint - Aynı kullanıcı adı ve profil fotoğrafıyla botun mesaj yazmasını sağlar.```")
       
 @client.command()
+@commands.guild_only()
 async def ping(ctx):
     await ctx.send("```Pingim {}ms efendim.```".format(round(client.latency, 1) * 1000))
 
 @client.command()
+@commands.guild_only()
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"```{user} başarıyla atıldı.\nSebep: " + reason + "```")
   
 @client.command()
+@commands.guild_only()
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
     await ctx.send(f"```{user} başarıyla yasaklandı.\nSebep: " + reason + "```")
 
 @client.command()
+@commands.guild_only()
 async def unban(ctx, *, member):
   banned_users = await ctx.guild.bans()
   member_name, member_discriminator = member.split('#')
@@ -60,12 +59,14 @@ async def unban(ctx, *, member):
     return
 
 @client.command()
+@commands.guild_only()
 async def avatar(ctx, *,  avamember : discord.Member=None):
     userAvatarUrl = avamember.avatar_url
     await ctx.send(userAvatarUrl)
 
 @commands.has_role("Duyurabilir")
 @client.command()
+@commands.guild_only()
 async def duyur(ctx, *args):
 	response = ""
 
@@ -79,17 +80,26 @@ async def duyur(ctx, *args):
 	await ctx.send(embed=embed)
 
 @client.command()
-async def attack(ctx, *,  imparatorluk):
-    await ctx.send("```" + imparatorluk + " ülkesine ateş açıldı!\nTanklar, ileri! Yönümüz " + imparatorluk + " İmparatorluğu!```")
+@commands.guild_only()
+async def attack(ctx, *, ulparator, devlet):
+    if(ulparator=="ülke"):
+        await ctx.send("```" + devlet + " ülkesine ateş açıldı!\nTanklar, ileri! Yönümüz " + devlet + " Ülkesi!```")
+    elif(ulparator=="imparator"):
+        await ctx.send("```" + devlet + " imparatorluğuna ateş açıldı!\nTanklar, ileri! Yönümüz " + devlet + " İmparatorluğu!```")
+    else:
+        await ctx.send("```Ülke mi imparator mu?\n\nÖrnek:\nğattack ülke Ermenistan```")
 
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("```Efendim, ğ?```")
+    elif isinstance(error, commands.NoPrivateMessage):
+        await ctx.send("```Bu komut özel mesajlarda kullanılamaz.```")
     else:
         raise error
 
 @client.command()
+@commands.guild_only()
 async def print(ctx, *args):
     response = ""
 
@@ -104,6 +114,11 @@ async def print(ctx, *args):
         webhook = await ctx.channel.create_webhook(name = "Özel Asistan")
 
     await webhook.send(response, username = ctx.author.name, avatar_url = ctx.author.avatar_url)
-    await ctx.delete()
+    await ctx.message.delete()
 
-client.run(TOKEN)
+@client.command()
+@commands.guild_only()
+async def duygu(ctx):
+        await ctx.send("```Discord'da Ğ emojisi olmadığı için mutsuzum -.-```")
+
+client.run(OzelAsistan.TOKEN)
