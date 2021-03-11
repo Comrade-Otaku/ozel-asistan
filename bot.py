@@ -3,6 +3,7 @@ import time
 from discord.ext import commands
 from discord import utils
 from oaconfig import OzelAsistan
+from discord.utils import get
 
 client = commands.Bot(command_prefix = "ğ")
 client.remove_command("help")
@@ -28,7 +29,7 @@ async def help(ctx, arg = "1"):
 @client.command()
 @commands.guild_only()
 async def ping(ctx):
-    await ctx.send("```Pingim {}ms efendim.```".format(round(client.latency, 1) * 1000))
+    await ctx.send("```Pingim {}ms efendim.```".format(int(client.latency * 1000)))
 
 @client.command()
 @commands.guild_only()
@@ -81,7 +82,7 @@ async def duyur(ctx, *args):
 
 @client.command()
 @commands.guild_only()
-async def attack(ctx, *, ulparator, devlet):
+async def attack(ctx, ulparator, devlet):
     if(ulparator=="ülke"):
         await ctx.send("```" + devlet + " ülkesine ateş açıldı!\nTanklar, ileri! Yönümüz " + devlet + " Ülkesi!```")
     elif(ulparator=="imparator"):
@@ -120,5 +121,17 @@ async def print(ctx, *args):
 @commands.guild_only()
 async def duygu(ctx):
         await ctx.send("```Discord'da Ğ emojisi olmadığı için mutsuzum -.-```")
+
+@client.command()
+@commands.guild_only()
+async def mesaj(ctx, *args):
+	response = ""
+
+	for arg in args:
+		response = response + " " + arg
+	
+	response = response[1:len(response)]
+	await ctx.message.delete()
+	await ctx.send("```" + response + "```")
 
 client.run(OzelAsistan.TOKEN)
