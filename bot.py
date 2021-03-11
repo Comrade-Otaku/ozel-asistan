@@ -24,7 +24,7 @@ async def on_ready():
 @client.command()
 async def help(ctx, arg = "1"):
     if(arg=="1"):
-        await ctx.send("```ğhelp - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.\nğduyur - Duyuru yapar (Duyurabilir yetkisine sahip olmalısınız.)\nğprint - Aynı kullanıcı adı ve profil fotoğrafıyla botun mesaj yazmasını sağlar.```")
+        await ctx.send("```ğhelp - Komutları listeler\nğping - Botun pingini aktarır.\nğban - Kullanıcıyı yasaklar.\nğkick - Kullanıcıyı atar.\nğunban - Kullanıcının yasağını kaldırır.\nğavatar - Kullanıcının profil fotoğrafını gösterir.\nğduyur - Duyuru yapar (Duyurabilir yetkisine sahip olmalısınız.)\nğprint - Aynı kullanıcı adı ve profil fotoğrafıyla botun mesaj yazmasını sağlar.\nğmesaj - Botun mesaj yazmasını sağlar.```")
       
 @client.command()
 @commands.guild_only()
